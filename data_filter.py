@@ -10,7 +10,7 @@ Original file is located at
 import pandas as pd
 import json
 import time
-df = pd.read_csv('C:\\Users\\ADMIN\\Desktop\\Movie_Search_Engine\\data\\movies_metadata.csv')
+df = pd.read_csv('data/movies_metadata.csv', low_memory=False)
 genres_list = df["genres"].tolist()
 language_list = df["original_language"].tolist()
 genres_tags = []
@@ -52,24 +52,24 @@ def tag_search(dataframe,tags):
   for tag in tags:
     tag = tag.lower()
     if tag == "+adult":
-      filtered_df = dataframe[dataframe['adult'].str.contains("FALSE", case=False, na=False)]
+      dataframe = dataframe[dataframe['adult'].str.contains("FALSE", case=False, na=False)]
     elif tag in genres_tags:
-      filtered_df = dataframe[dataframe['genres'].str.contains(tag, case=False, na=False)]
+      dataframe = dataframe[dataframe['genres'].str.contains(tag, case=False, na=False)]
     elif tag in language_tags:
-      filtered_df = dataframe[dataframe['original_language'].str.contains(tag, case=False, na=False)]
+      dataframe = dataframe[dataframe['original_language'].str.contains(tag, case=False, na=False)]
     else:
       return pd.DataFrame()
-    return filtered_df
+  return dataframe
 
-def main():
-  User_input=input("What to search: ")
+def main(User_input):
   keyword = extract_keyword(User_input)
   tags = extract_tags(User_input)
   Movie_list = title_search(df,keyword)
   Movie_list = tag_search(Movie_list,tags)
   return Movie_list
 start_time = time.time()
-print(main())
+result = main("+animation +adventure")
+print(result['title'])
 end_time = time.time()
 execution_time = end_time - start_time
 print(f"Execution time: {execution_time} seconds")
