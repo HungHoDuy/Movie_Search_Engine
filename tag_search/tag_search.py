@@ -1,2 +1,0 @@
-def tag_search():
-    
