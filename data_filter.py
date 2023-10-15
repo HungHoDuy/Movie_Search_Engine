@@ -12,24 +12,24 @@ import time
 def extract_tags(input_string):
     tags = []
 
-    words = input_string.split()
+#     words = input_string.split()
 
-    for word in words:
-        if word.startswith('+'):
-            tags.append(word[1:])
+#     for word in words:
+#         if word.startswith('+'):
+#             tags.append(word[1:])
 
-    return tags
+#     return tags
 
-def extract_keyword(input):
-  if "+" not in input:
-    return input
-  else:
-    tag_start = input.find("+")
-    return input[:tag_start].strip()
+# def extract_keyword(input):
+#   if "+" not in input:
+#     return input
+#   else:
+#     tag_start = input.find("+")
+#     return input[:tag_start].strip()
 
-def title_search(dataframe,keyword):
-  filtered_df = dataframe[dataframe['title'].str.contains(keyword, case=False, na=False)]
-  return filtered_df
+# def title_search(dataframe,keyword):
+#   filtered_df = dataframe[dataframe['title'].str.contains(keyword, case=False, na=False)]
+#   return filtered_df
 
 def tag_search(dataframe,tags,genres_tags,language_tags):
   if len(tags) == 0:
