@@ -66,13 +66,13 @@ def tag_search(dataframe, tags, genres_tags, language_tags, production_countries
 def DataFilter(User_input):
     data_movie_path = '/home/chunporo/Documents/GitHub/Movie_Search_Engine/data/movies_metadata.csv'
     # df = dataProcessing.preprocess_movie_data(data_movie_path)
-    df = pd.read_csv(data_movie_path)
+    df = pd.read_csv(data_movie_path, low_memory=False)
     genres_tags = dataProcessing.unique_genres
     language_tags = dataProcessing.unique_language
     production_companies_tags = dataProcessing.unique_production_companies
     production_countries_tags = dataProcessing.unique_production_countries
     collection_tags = dataProcessing.unique_collection
-    print(genres_tags)
+    # print(genres_tags)
     keyword = extract_keyword(User_input)
     tags = extract_tags(User_input)
     Movie_list = title_search(df, keyword)
@@ -82,9 +82,9 @@ def DataFilter(User_input):
     return Movie_list
 
 
-start_time = time.time()
-result = DataFilter("batman +adventure +animation")
-print(result.title)
-end_time = time.time()
-execution_time = end_time - start_time
-print(f"Execution time: {execution_time} seconds")
+# start_time = time.time()
+# result = DataFilter("batman +adventure +animation")
+# print(result.title)
+# end_time = time.time()
+# execution_time = end_time - start_time
+# print(f"Execution time: {execution_time} seconds")
