@@ -23,7 +23,7 @@ def find_director(data_str):
     end_index = data_str.find("'", start_index)
     return data_str[start_index:end_index]
 
-def dataAdd(keyword):
+def dataAdd_df(keyword):
     df = DataFilter(keyword)
 
     credit_file_links = '/home/chunporo/Documents/GitHub/Movie_Search_Engine/data/credits.csv'
@@ -48,5 +48,5 @@ def dataAdd(keyword):
     df['production_countries'] = df['production_countries'].apply(genres_name)
     df['spoken_languages'] = df['spoken_languages'].apply(genres_name)
     # print(credits_df.cast.values[0])
-    df.to_csv('sample.csv')
-dataAdd('batman')
+    # df.to_csv('sample.csv')
+    return df
