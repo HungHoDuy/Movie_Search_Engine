@@ -10,6 +10,7 @@ Original file is located at
 import pandas as pd
 import json
 import time
+
 df = pd.read_csv('data/movies_metadata.csv', low_memory=False)
 genres_list = df["genres"].tolist()
 language_list = df["original_language"].tolist()
@@ -23,53 +24,54 @@ for line in genres_list:
 for language in language_list:
   if language not in language_tags:
     language_tags.append(language)
+print(genres_tags,language_tags)
 
-def extract_tags(input_string):
-    tags = []
+# def extract_tags(input_string):
+#     tags = []
 
-    words = input_string.split()
+#     words = input_string.split()
 
-    for word in words:
-        if word.startswith('+'):
-            tags.append(word[1:])
+#     for word in words:
+#         if word.startswith('+'):
+#             tags.append(word[1:])
 
-    return tags
+#     return tags
 
-def extract_keyword(input):
-  if "+" not in input:
-    return input
-  else:
-    tag_start = input.find("+")
-    return input[:tag_start].strip()
+# def extract_keyword(input):
+#   if "+" not in input:
+#     return input
+#   else:
+#     tag_start = input.find("+")
+#     return input[:tag_start].strip()
 
-def title_search(dataframe,keyword):
-  filtered_df = dataframe[dataframe['title'].str.contains(keyword, case=False, na=False)]
-  return filtered_df
+# def title_search(dataframe,keyword):
+#   filtered_df = dataframe[dataframe['title'].str.contains(keyword, case=False, na=False)]
+#   return filtered_df
 
-def tag_search(dataframe,tags):
-  if len(tags) == 0:
-    return dataframe
-  for tag in tags:
-    tag = tag.lower()
-    if tag == "+adult":
-      dataframe = dataframe[dataframe['adult'].str.contains("FALSE", case=False, na=False)]
-    elif tag in genres_tags:
-      dataframe = dataframe[dataframe['genres'].str.contains(tag, case=False, na=False)]
-    elif tag in language_tags:
-      dataframe = dataframe[dataframe['original_language'].str.contains(tag, case=False, na=False)]
-    else:
-      return pd.DataFrame()
-  return dataframe
+# def tag_search(dataframe,tags):
+#   if len(tags) == 0:
+#     return dataframe
+#   for tag in tags:
+#     tag = tag.lower()
+#     if tag == "+adult":
+#       dataframe = dataframe[dataframe['adult'].str.contains("FALSE", case=False, na=False)]
+#     elif tag in genres_tags:
+#       dataframe = dataframe[dataframe['genres'].str.contains(tag, case=False, na=False)]
+#     elif tag in language_tags:
+#       dataframe = dataframe[dataframe['original_language'].str.contains(tag, case=False, na=False)]
+#     else:
+#       return pd.DataFrame()
+#   return dataframe
 
-def main(User_input):
-  keyword = extract_keyword(User_input)
-  tags = extract_tags(User_input)
-  Movie_list = title_search(df,keyword)
-  Movie_list = tag_search(Movie_list,tags)
-  return Movie_list
-start_time = time.time()
-result = main("+animation +adventure")
-print(result['title'])
-end_time = time.time()
-execution_time = end_time - start_time
-print(f"Execution time: {execution_time} seconds")
+# def main(User_input):
+#   keyword = extract_keyword(User_input)
+#   tags = extract_tags(User_input)
+#   Movie_list = title_search(df,keyword)
+#   Movie_list = tag_search(Movie_list,tags)
+#   return Movie_list
+# start_time = time.time()
+# result = main("Iron")
+# print(result)
+# end_time = time.time()
+# execution_time = end_time - start_time
+# print(f"Execution time: {execution_time} seconeds")
