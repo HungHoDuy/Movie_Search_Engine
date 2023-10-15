@@ -1,6 +1,7 @@
 import pandas as pd
 from data_filter import DataFilter
 import ast
+import numpy as np
 
 def cast_name(data_str):
     data_list = ast.literal_eval(str(data_str))
@@ -47,6 +48,8 @@ def dataAdd_df(keyword):
     df['production_companies'] = df['production_companies'].apply(genres_name)
     df['production_countries'] = df['production_countries'].apply(genres_name)
     df['spoken_languages'] = df['spoken_languages'].apply(genres_name)
+    df['year'] = pd.to_datetime(df['release_date'], errors='coerce').apply(lambda x: str(x).split('-')[0] if x != np.nan else np.nan)
+
     # print(credits_df.cast.values[0])
     # df.to_csv('sample.csv')
     return df
