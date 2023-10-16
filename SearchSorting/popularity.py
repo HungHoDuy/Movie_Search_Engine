@@ -7,4 +7,4 @@ def popularity_df(keyword):
     df = df.sort_values(by='popularity', ascending=False)
     return df
 
-# popularity_df('batman').to_csv('sample.csv')
+popularity_df('batman').to_csv('sample.csv')

@@ -32,4 +32,4 @@ def rating_df(keyword):
         return '+'.join(item for item in data_list)
     df['genres'] = df['genres'].apply(genres_to_str)
     return df
-rating_df('batman').to_csv('sample.csv')
+# rating_df('batman').to_csv('sample.csv')

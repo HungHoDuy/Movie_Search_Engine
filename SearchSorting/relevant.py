@@ -35,4 +35,6 @@ def relevant_df(keyword):
     for movies in sorted_similar_movies:
         movie_list.append(movies[0])
     df = df.reindex(movie_list)
-    # print(df.title)
+    return df
+
+relevant_df('your name').to_csv('sample.csv')

@@ -87,4 +87,5 @@ def DataFilter(User_input):
 # print(result.title)
 # end_time = time.time()
 # execution_time = end_time - start_time
-# print(f"Execution time: {execution_time} seconds")
+# pint(f"Execution time: {execution_time} seconds")
+print(DataFilter('your name'))
