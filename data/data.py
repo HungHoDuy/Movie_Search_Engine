@@ -15,19 +15,25 @@ def preprocess_movie_data(file_path):
     df['genres'] = df['genres'].apply(parse_json)
 
     # Trích xuất giá trị 'name' từ cột 'genres' và ghi đè cột 'genres' với danh sách các tên thể loại
-    df['genres'] = df['genres'].apply(lambda genres: [genre['name'] for genre in genres] if isinstance(genres, list) else [])
+    df['genres'] = df['genres'].apply(lambda genres: ', '.join([genre['name'] for genre in genres]) if isinstance(genres, list) else '')
 
     # Xử lý cột 'production_companies'
     df['production_companies'] = df['production_companies'].apply(parse_json)
 
     # Trích xuất giá trị 'name' từ cột 'production_companies' và ghi đè cột 'production_companies' với danh sách các tên công ty sản xuất
-    df['production_companies'] = df['production_companies'].apply(lambda companies: [company['name'] for company in companies] if isinstance(companies, list) else [])
+    df['production_companies'] = df['production_companies'].apply(lambda companies: ', '.join([company['name'] for company in companies]) if isinstance(companies, list) else '')
 
     # Xử lý cột 'production_countries'
     df['production_countries'] = df['production_countries'].apply(parse_json)
 
     # Trích xuất giá trị 'name' từ cột 'production_countries' và ghi đè cột 'production_countries' với danh sách các tên quốc gia sản xuất
-    df['production_countries'] = df['production_countries'].apply(lambda countries: [country['name'] for country in countries] if isinstance(countries, list) else [])
+    df['production_countries'] = df['production_countries'].apply(lambda countries: ', '.join([country['name'] for country in countries]) if isinstance(countries, list) else '')
+
+    #Xử lý cột 'belongs_to_collection'
+    df['belongs_to_collection'] = df['belongs_to_collection'].apply(parse_json)
+
+    #Trích xuất giá trị 'name' từ cột 'belongs_to_collection' và ghi đè cột 'belongs_to_collection' với danh sách các tên bộ sưu tập
+    df['belongs_to_collection'] = df['belongs_to_collection'].apply(lambda collections: ', '.join([collection['name'] for collection in collections]) if isinstance(collections, list) else '')
 
     return df
 
@@ -35,8 +41,12 @@ def preprocess_movie_data(file_path):
 # Sử dụng hàm và lưu kết quả vào biến df_processed
 df_processed = preprocess_movie_data("C:\\Users\\ADMIN\\VSC Projects\\Project\\movies_metadata.csv")
 
+print(type(df_processed))
 unique_genres = list(set([genre for genres in df_processed['genres'] for genre in genres]))
 
 unique_production_countries = list(set([country for countries in df_processed['production_countries'] for country in countries]))
 
 unique_production_companies = list(set([company for companies in df_processed['production_companies'] for company in companies]))
+
+unique_original_language = list(set([language for languages in df_processed['original_language'] if isinstance(languages, list) for language in languages]))
+
