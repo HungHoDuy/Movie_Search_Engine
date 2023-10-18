@@ -2,10 +2,8 @@ import pandas as pd
 import json
 
 def preprocess_movie_data(file_path):
-    # Đọc dữ liệu từ file CSV vào DataFrame
-    df = pd.read_csv(file_path)
+    df = pd.read_csv(file_path, low_memory=False)
 
-    # Chuyển các chuỗi JSON hợp lệ trong cột 'genres' thành danh sách
     def parse_json(x):
         try:
             return json.loads(x.replace("'", "\""))
@@ -14,18 +12,14 @@ def preprocess_movie_data(file_path):
 
     df['genres'] = df['genres'].apply(parse_json)
 
-    # Trích xuất giá trị 'name' từ cột 'genres' và ghi đè cột 'genres' với danh sách các tên thể loại
     df['genres'] = df['genres'].apply(lambda genres: ', '.join([genre['name'] for genre in genres]) if isinstance(genres, list) else '')
 
-    # Xử lý cột 'production_companies'
     df['production_companies'] = df['production_companies'].apply(parse_json)
 
-    # Trích xuất giá trị 'name' từ cột 'production_companies' và ghi đè cột 'production_companies' với danh sách các tên công ty sản xuất
     df['production_companies'] = df['production_companies'].apply(lambda companies: ', '.join([company['name'] for company in companies]) if isinstance(companies, list) else '')
-    # Xử lý cột 'production_countries'
+
     df['production_countries'] = df['production_countries'].apply(parse_json)
 
-    # Trích xuất giá trị 'name' từ cột 'production_countries' và ghi đè cột 'production_countries' với danh sách các tên quốc gia sản xuất
     df['production_countries'] = df['production_countries'].apply(lambda countries: ', '.join([country['name'] for country in countries]) if isinstance(countries, list) else '')
     
     df['belongs_to_collection'] = df['belongs_to_collection'].apply(parse_json)
@@ -34,14 +28,27 @@ def preprocess_movie_data(file_path):
 
     return df
 
-
-# Sử dụng hàm và lưu kết quả vào biến df_processed
 df_processed = preprocess_movie_data("C:\\Users\\ADMIN\\VSC Projects\\Project\\movies_metadata.csv")
 
-unique_genres = list(set([genre for genres in df_processed['genres'] for genre in genres]))
+df_processed['genres'] = df_processed['genres'].str.split(', ')
+all_genres = sum(df_processed['genres'], [])
+unique_genres = list(set(all_genres))
+unique_genres.remove('')
+unique_genres = [genre.replace(' ', '_') for genre in unique_genres]
 
-unique_production_countries = list(set([country for countries in df_processed['production_countries'] for country in countries]))
 
-unique_production_companies = list(set([company for companies in df_processed['production_companies'] for company in companies]))
+df_processed['production_companies'] = df_processed['production_companies'].str.split(',')
+all_companies = sum(df_processed['production_companies'], [])
+unique_production_companies = list(set(all_companies))
+unique_production_companies.remove('')
+unique_production_companies = [company.replace(' ', '_') for company in unique_production_companies]
 
-unique_original_language = list(set([language for languages in df_processed['original_language'] if isinstance(languages, list) for language in languages]))
+df_processed['production_countries'] = df_processed['production_countries'].str.split(',')
+all_countries = sum(df_processed['production_countries'], [])
+unique_production_countries = list(set(all_countries))
+unique_production_countries.remove('')
+unique_production_countries = [country.replace(' ', '_') for country in unique_production_countries]
+
+unique_languages = list(set(''.join(str(items)) for items in df_processed['original_language']))
+
+print(unique_genres)
