@@ -11,6 +11,7 @@ import pandas as pd
 import time
 import unique_algorithm
 from posterFind import posterPathFind
+from fuzzywuzzy import fuzz
 
 def data_process():
 
@@ -78,7 +79,8 @@ def DataFilter(User_input):
     tags = extract_tags_and_keywords(User_input)[0]
     Movie_list = title_search(df, keyword)
     Movie_list = tag_search(Movie_list, tags, genres_tags, language_tags, production_countries_tags, production_companies_tags)
-    Movie_list['poster_path'] = Movie_list['imdb_id'].apply(posterPathFind)
+    # Movie_list['poster_path'] = Movie_list['imdb_id'].apply(posterPathFind)
+   
     return Movie_list
 
 

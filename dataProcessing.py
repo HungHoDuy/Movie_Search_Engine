@@ -125,4 +125,4 @@ df_processed = preprocess_movie_data("movies_metadata.csv")
 # languages = [code_to_language(code) for code in language_codes]
 # my_list = languages
 # languages_cleaned_list = [item for item in my_list if not (isinstance(item, float) and math.isnan(item))]
-df_processed.to_csv('movie_preprocessing.csv')
+# df_processed.to_csv('movie_preprocessing.csv')

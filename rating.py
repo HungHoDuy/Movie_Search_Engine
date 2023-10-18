@@ -32,4 +32,5 @@ def rating_df(keyword):
     df['genres'] = df['genres'].apply(genres_to_str)
     
     return df
-# rating_df('batman').to_csv('sample.csv')
+
+# rating_df('+romance').to_csv('sample.csv')
