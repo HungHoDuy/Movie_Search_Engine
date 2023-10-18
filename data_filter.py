@@ -10,6 +10,7 @@ Original file is located at
 import pandas as pd
 import time
 import unique_algorithm
+from posterFind import posterPathFind
 
 def data_process():
 
@@ -77,16 +78,17 @@ def DataFilter(User_input):
     tags = extract_tags_and_keywords(User_input)[0]
     Movie_list = title_search(df, keyword)
     Movie_list = tag_search(Movie_list, tags, genres_tags, language_tags, production_countries_tags, production_companies_tags)
+    Movie_list['poster_path'] = Movie_list['imdb_id'].apply(posterPathFind)
     return Movie_list
 
 
-start_time = time.time()
+# start_time = time.time()
 
 
-result = DataFilter("bat man +animation")
-print(result["genres"])
+# result = DataFilter("bat man +animation")
+# print(result["genres"])
 
-end_time = time.time()
-execution_time = end_time - start_time
-print(f"Execution time: {execution_time} seconds")
+# end_time = time.time()
+# execution_time = end_time - start_time
+# print(f"Execution time: {execution_time} seconds")
 

@@ -2,10 +2,10 @@ import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from dataAdd import dataAdd_df
+from data_filter import DataFilter
 
 def relevant_df(keyword):
-    df = dataAdd_df(keyword)
+    df = DataFilter(keyword)
     features = ['keywords', 'cast', 'genres', 'crew']
     for feature in features:
         df[feature] = df[feature].fillna('')
@@ -37,4 +37,3 @@ def relevant_df(keyword):
     df = df.reindex(movie_list)
     return df
 
-relevant_df('your name').to_csv('sample.csv')

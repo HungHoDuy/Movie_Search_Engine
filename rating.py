@@ -1,11 +1,10 @@
 from ast import literal_eval
 import numpy as np
 import pandas as pd
-from dataAdd import dataAdd_df
-
+from data_filter import DataFilter
 
 def rating_df(keyword):
-    df = dataAdd_df(keyword)
+    df = DataFilter(keyword)
     df.to_csv('input.csv')
     vote_counts = df[df['vote_count'].notnull()]['vote_count'].astype('int')
     vote_averages = df[df['vote_average'].notnull()]['vote_average'].astype('int')
@@ -31,5 +30,6 @@ def rating_df(keyword):
     def genres_to_str(data_list):
         return '+'.join(item for item in data_list)
     df['genres'] = df['genres'].apply(genres_to_str)
+    
     return df
 # rating_df('batman').to_csv('sample.csv')
