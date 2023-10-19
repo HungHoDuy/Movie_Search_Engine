@@ -2,7 +2,7 @@
 from serpapi import GoogleSearch
 import pandas as pd
 import time
-import unique_algorithm
+import unique_filter
 from posterFind import posterPathFind
 
 # Define a function to perform spelling correction using Google search
@@ -39,19 +39,7 @@ def Spell_fix(input):
 # Define a function to process data from a CSV file
 def data_process():
     # Read data from a CSV file
-    df = pd.read_csv('movie_preprocessing.csv', low_memory=False)
-    
-    # Define a function to replace spaces with underscores in specific columns
-    def change_value(value):
-        return str(value).replace(' ', '_')
-
-    # Apply the column value transformation to specific columns
-    df['genres'] = df['genres'].apply(change_value)
-    df['original_language'] = df['original_language'].apply(change_value)
-    df['production_companies'] = df['production_companies'].apply(change_value)
-    df['production_countries'] = df['production_countries'].apply(change_value)
-    df['belongs_to_collection'] = df['belongs_to_collection'].apply(change_value)
-
+    df = pd.read_csv('filter.csv', low_memory=False)
     return df
 
 # Define a function to extract tags and keywords from an input string
@@ -104,11 +92,11 @@ def tag_search(dataframe, tags, genres_tags, language_tags, production_countries
 def DataFilter(User_input, spell_check=True):
     # Process the data from a CSV file
     df = data_process()
-    genres_tags = unique_algorithm.unique_genres_read
-    language_tags = unique_algorithm.unique_language_read
-    production_companies_tags = unique_algorithm.unique_production_companies_read
-    production_countries_tags = unique_algorithm.unique_production_countries_read
-    collection_tags = unique_algorithm.unique_belongs_to_collection_read
+    genres_tags = unique_filter.unique_genres_read
+    language_tags = unique_filter.unique_language_read
+    production_companies_tags = unique_filter.unique_production_companies_read
+    production_countries_tags = unique_filter.unique_production_countries_read
+    collection_tags = unique_filter.unique_belongs_to_collection_read
 
     # Extract keywords and tags from user input
     keyword = extract_tags_and_keywords(User_input)[1]
@@ -134,7 +122,7 @@ def DataFilter(User_input, spell_check=True):
 
 # Example usage and timing of the DataFilter function
 # start_time = time.time()
-# result = DataFilter("+mark_collection")
+# result = DataFilter("Your Name")
 # print(result[0])
 # end_time = time.time()
 # execution_time = end_time - start_time
