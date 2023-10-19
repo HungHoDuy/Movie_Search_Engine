@@ -130,7 +130,7 @@ def preprocess_movie_data(file_path):
     return df
 
 
-df = pd.read_csv('movie_preprocessing.csv',low_memory=False)
+# df = pd.read_csv('movie_preprocessing.csv',low_memory=False)
 # df_processed.to_csv('movie_preprocessing.csv')
 # df_processed['genres'] = df_processed['genres'].str.split(', ')
 # all_genres = sum(df_processed['genres'], [])
@@ -166,15 +166,15 @@ df = pd.read_csv('movie_preprocessing.csv',low_memory=False)
 # my_list = languages
 # languages_cleaned_list = [item for item in my_list if not (isinstance(item, float) and math.isnan(item))]
 
-unique_belongs_to_collection = [str(item) for item in df['belongs_to_collection']]
-new_list = list()
-for item in unique_belongs_to_collection:
-    if str(item) != 'nan':
-        new_list.append(item)
+# unique_belongs_to_collection = [str(item) for item in df['belongs_to_collection']]
+# new_list = list()
+# for item in unique_belongs_to_collection:
+#     if str(item) != 'nan':
+#         new_list.append(item)
         
-unique_production_countries = set(subitem for item in df['production_countries'] for subitem in str(item).split(','))
-new_list = []
-for item in unique_production_countries:
-    if str(item) != 'nan':
-        new_list.append(item)
-print(new_list)
+# unique_production_countries = set(subitem for item in df['production_countries'] for subitem in str(item).split(','))
+# new_list = []
+# for item in unique_production_countries:
+#     if str(item) != 'nan':
+#         new_list.append(item)
+# print(new_list)
