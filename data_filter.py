@@ -133,7 +133,7 @@ def DataFilter(User_input, spell_check=True):
 
 # Example usage and timing of the DataFilter function
 # start_time = time.time()
-result = DataFilter("+English")
+result = DataFilter("+Vietnamese")
 print(result[0])
 # end_time = time.time()
 # execution_time = end_time - start_time
