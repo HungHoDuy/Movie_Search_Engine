@@ -77,17 +77,35 @@ def display_search_results(results, query, results_limit=10):
         st.write("No results found.")
         return
 
-    for index, row in results.head(results_limit).iterrows():
-        st.subheader(row['title'])
-        st.write(row['overview'])
-        st.write(row['vote_average'])
-        st.write(row['popularity'])
-        st.image(row['poster_path'], width=200)
+    # for index, row in results.head(results_limit).iterrows():
+    #     st.subheader(row['title'])
+    #     st.write(row['overview'])
+    #     st.write(row['vote_average'])
+    #     st.write(row['popularity'])
+    #     st.image(row['poster_path'], width=200)
 
-        if st.button("More Details", key=f"details-{index}"):
-            display_movie_details(row)
-            return
+    #     if st.button("More Details", key=f"details-{index}"):
+    #         display_movie_details(row)
+    #         return
+    
+    half_results_limit = results_limit // 2
+    cols_row1 = st.columns(half_results_limit)
+    cols_row2 = st.columns(half_results_limit)
 
+    for index, row in enumerate(results.head(results_limit).iterrows()):
+        idx, data = row
+        cols = cols_row1 if index < half_results_limit else cols_row2
+        col = cols[index % half_results_limit]
+
+        with col:
+            poster_url = data['poster_path'] if data['poster_path'] else 'logo.png'
+            col.image(poster_url, width=200)
+            col.write(data['title'])
+
+            if col.button("More Details", key=f"details-{index}"):
+                display_movie_details(data)
+                return
+            
 def main():
     st.title("JAValorant movie search engine")
 
