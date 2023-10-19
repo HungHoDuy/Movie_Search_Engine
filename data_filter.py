@@ -96,7 +96,6 @@ def tag_search(dataframe, tags, genres_tags, language_tags, production_countries
             dataframe = dataframe[dataframe['production_companies'].str.contains(tag, case=False, na=False)]
         elif tag in collection_tags:
             dataframe = dataframe[dataframe['belongs_to_collection'].str.contains(tag, case=False, na=False)]
-            print("true")
         else:
             return pd.DataFrame(columns=dataframe.columns)
     return dataframe
@@ -110,7 +109,6 @@ def DataFilter(User_input, spell_check=True):
     production_companies_tags = unique_algorithm.unique_production_companies_read
     production_countries_tags = unique_algorithm.unique_production_countries_read
     collection_tags = unique_algorithm.unique_belongs_to_collection_read
-    print(collection_tags)
 
     # Extract keywords and tags from user input
     keyword = extract_tags_and_keywords(User_input)[1]
@@ -130,7 +128,7 @@ def DataFilter(User_input, spell_check=True):
     Movie_list = tag_search(Movie_list, tags, genres_tags, language_tags, production_countries_tags, collection_tags, production_companies_tags)
     
     # Add a 'poster_path' column to the DataFrame using posterPathFind
-    Movie_list['poster_path'] = Movie_list['imdb_id'].apply(posterPathFind)
+    # Movie_list['poster_path'] = Movie_list['imdb_id'].apply(posterPathFind)
     
     return [Movie_list, corrected_keyword]
 
