@@ -122,8 +122,7 @@ def DataFilter(User_input, spell_check=True):
 
 # Example usage and timing of the DataFilter function
 # start_time = time.time()
-# result = DataFilter("Your Name")
-# print(result[0])
+# DataFilter('Your Namr')[0].to_csv('filter_sample.csv')
 # end_time = time.time()
 # execution_time = end_time - start_time
 # print(f"Execution time: {execution_time} seconds")
