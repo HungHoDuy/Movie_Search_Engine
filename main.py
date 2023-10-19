@@ -66,10 +66,10 @@ def main():
     filters = create_filters()
 
     filter_query = " ".join([
-        " ".join([f"+{genre}" for genre in filters['genres']]),
-        " ".join([f"+{language}" for language in filters['languages']]),
-        " ".join([f"+{company}" for company in filters['companies']]),
-        " ".join([f"+{collection}" for collection in filters['collections']])
+        " ".join([f"+{genre.replace(' ', '_')}" for genre in filters['genres']]),
+        " ".join([f"+{language.replace(' ', '_')}" for language in filters['languages']]),
+        " ".join([f"+{company.replace(' ', '_')}" for company in filters['companies']]),
+        " ".join([f"+{collection.replace(' ', '_')}" for collection in filters['collections']])
     ])
 
     # Search bar
