@@ -10,4 +10,4 @@ def AtoZ_df(keyword):
     df = df.sort_values(by="title", ascending=True)
     return df
 
-AtoZ_df('irod mad').to_csv('result_sample.csv')
+# AtoZ_df('irod mad').to_csv('result_sample.csv')

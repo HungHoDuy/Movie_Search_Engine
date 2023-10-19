@@ -20,8 +20,9 @@ def relevant_df(keyword):
     df = re_list[0]
     print(df)
     keyword = ' '.join(re_list[1])
-    df['score'] = df['title'].apply(keyword_similarity_advanced)
-    df = df.sort_values(by='score', ascending=False)
+    if keyword != '':
+        df['score'] = df['title'].apply(keyword_similarity_advanced)
+        df = df.sort_values(by='score', ascending=False)
     return df
 
-relevant_df('your namd +animation').to_csv('result_sample.csv')
+# relevant_df('+science_fiction').to_csv('result_sample.csv')
