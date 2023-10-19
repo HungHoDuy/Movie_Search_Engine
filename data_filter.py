@@ -105,15 +105,14 @@ def DataFilter(User_input,spell_check =True):
     tags = extract_tags_and_keywords(User_input)[0]
     Movie_list = title_search(df, keyword)
     Movie_list = tag_search(Movie_list, tags, genres_tags, language_tags,production_countries_tags,collection_tags, production_companies_tags)
-    # Movie_list['poster_path'] = Movie_list['imdb_id'].apply(posterPathFind)
-   
+    Movie_list['poster_path'] = Movie_list['imdb_id'].apply(posterPathFind)
     return [Movie_list,corrected_keyword]
 
 
 # start_time = time.time()
 
-result = DataFilter("Youd Namd")
-print(result[0][["title", "original_title", "keywords"]])
+# result = DataFilter("Youd Namd")
+# print(result[0][["title", "original_title", "keywords"]])
 
 # end_time = time.time()
 # execution_time = end_time - start_time

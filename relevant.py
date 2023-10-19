@@ -18,7 +18,7 @@ def relevant_df(keyword):
 
     re_list = DataFilter(keyword)
     df = re_list[0]
-    print(df)
+    # print(df)
     keyword = ' '.join(re_list[1])
     if keyword != '':
         df['score'] = df['title'].apply(keyword_similarity_advanced)
