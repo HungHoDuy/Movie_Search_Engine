@@ -24,4 +24,4 @@ def relevant_df(keyword):
     df = df.sort_values(by='score', ascending=False)
     return df
 
-relevant_df('your namd +animation').to_csv('result_sample.csv')
+# relevant_df('youd namd +animation').to_csv('result_sample.csv')
