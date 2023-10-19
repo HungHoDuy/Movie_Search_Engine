@@ -95,6 +95,7 @@ def tag_search(dataframe, tags, genres_tags, language_tags, production_countries
             dataframe = dataframe[dataframe['production_companies'].str.contains(tag, case=False, na=False)]
         elif tag in collection_tags:
             dataframe = dataframe[dataframe['belongs_to_collection'].str.contains(tag, case=False, na=False)]
+            print("true")
         else:
             return pd.DataFrame(columns=dataframe.columns)
     return dataframe
@@ -107,8 +108,8 @@ def DataFilter(User_input, spell_check=True):
     language_tags = unique_algorithm.unique_language_read
     production_companies_tags = unique_algorithm.unique_production_companies_read
     production_countries_tags = unique_algorithm.unique_production_countries_read
-    collection_tags = unique_algorithm.unique_belongs_to_collection
-    
+    collection_tags = unique_algorithm.unique_belongs_to_collection_read
+
     # Extract keywords and tags from user input
     keyword = extract_tags_and_keywords(User_input)[1]
     
@@ -133,7 +134,7 @@ def DataFilter(User_input, spell_check=True):
 
 # Example usage and timing of the DataFilter function
 # start_time = time.time()
-# result = DataFilter("+Vietnamese")
+# result = DataFilter("+Toy_story_collection")
 # print(result[0])
 # end_time = time.time()
 # execution_time = end_time - start_time
