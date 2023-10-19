@@ -2,6 +2,7 @@ import pandas as pd
 import json
 from langcodes import Language
 import numpy as np
+from numpy import nan
 
 # import math
 import ast
@@ -94,6 +95,18 @@ def preprocess_movie_data(file_path):
     def cast_name(data_str):
         try:
             data_list = ast.literal_eval(str(data_str))
+            names = ",".join(item['character']+'-'+item["name"] for item in data_list)
+            return names
+        except ValueError as ve:
+            print(f"ValueError occurred: {ve}")
+            return ""  # or handle it in some other way
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            return ""  # or handle it in some other way
+    
+    def keyword_name(data_str):
+        try:
+            data_list = ast.literal_eval(str(data_str))
             names = ",".join(item["name"] for item in data_list)
             return names
         except ValueError as ve:
@@ -102,7 +115,7 @@ def preprocess_movie_data(file_path):
         except Exception as e:
             print(f"Error occurred: {e}")
             return ""  # or handle it in some other way
-
+        
     def find_director(data_str):
         data_change = str(data_str)
         start_index = data_change.find("'job': 'Director', 'name': '") + len(
@@ -113,12 +126,12 @@ def preprocess_movie_data(file_path):
 
     df["crew"] = df["crew"].apply(find_director)
     df["cast"] = df["cast"].apply(cast_name)
-    df["keywords"] = df["keywords"].apply(cast_name)
+    df["keywords"] = df["keywords"].apply(keyword_name)
     return df
 
 
-df_processed = preprocess_movie_data("movies_metadata.csv")
-
+df = pd.read_csv('movie_preprocessing.csv',low_memory=False)
+# df_processed.to_csv('movie_preprocessing.csv')
 # df_processed['genres'] = df_processed['genres'].str.split(', ')
 # all_genres = sum(df_processed['genres'], [])
 # unique_genres = list(set(all_genres))
@@ -152,4 +165,11 @@ df_processed = preprocess_movie_data("movies_metadata.csv")
 # languages = [code_to_language(code) for code in language_codes]
 # my_list = languages
 # languages_cleaned_list = [item for item in my_list if not (isinstance(item, float) and math.isnan(item))]
-# df_processed.to_csv('movie_preprocessing.csv')
+
+unique_belongs_to_collection = [str(item) for item in df['belongs_to_collection']]
+new_list = list()
+for item in unique_belongs_to_collection:
+    if str(item) != 'nan':
+        new_list.append(item)
+        
+print(new_list)
