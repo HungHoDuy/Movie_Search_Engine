@@ -1,6 +1,9 @@
 import streamlit as st
 from relevant import relevant_df
-from unique import unique_genres, unique_language, unique_production_companies, unique_belongs_to_collection, unique_production_countries
+from unique import unique_genres, unique_original_language, unique_production_companies, unique_belongs_to_collection, unique_production_countries, unique_spoken_languages
+from cast import unique_cast
+from director import unique_director
+from keywords import unique_keywords
 
 # Preconf
 st.set_page_config(
@@ -16,7 +19,7 @@ def create_filters():
             selected_genres = st.multiselect("Choose genres", unique_genres)
 
         with st.expander("Language"):
-            selected_languages = st.multiselect("Choose languages", unique_language)
+            selected_languages = st.multiselect("Choose languages", unique_original_language)
 
         with st.expander("Production Country"):
             selected_countries = st.multiselect("Choose countries", unique_production_countries)
@@ -27,12 +30,28 @@ def create_filters():
         with st.expander("Collection"):
             selected_collections = st.multiselect("Choose collections", unique_belongs_to_collection)
 
+        with st.expander("Spoken Language"):
+            selected_spoken_languages = st.multiselect("Choose spoken languages", unique_spoken_languages)
+
+        with st.expander("Cast"):
+            selected_cast = st.multiselect("Choose cast", unique_cast)
+
+        with st.expander("Director"):
+            selected_director = st.multiselect("Choose director", unique_director)
+
+        with st.expander("Keywords"):
+            selected_keywords = st.multiselect("Choose keywords", unique_keywords)
+
     filters = {
         'genres': selected_genres,
         'languages': selected_languages,
         'countries': selected_countries,
         'companies': selected_companies,
-        'collections': selected_collections
+        'collections': selected_collections,
+        'spoken_languages': selected_spoken_languages,
+        'cast': selected_cast,
+        'director': selected_director,
+        'keywords': selected_keywords
     }
 
     return filters
@@ -74,7 +93,11 @@ def main():
         " ".join([f"+{language.replace(' ', '_')}" for language in filters['languages']]),
         " ".join([f"+{country.replace(' ', '_')}" for country in filters['countries']]),
         " ".join([f"+{company.replace(' ', '_')}" for company in filters['companies']]),
-        " ".join([f"+{collection.replace(' ', '_')}" for collection in filters['collections']])
+        " ".join([f"+{collection.replace(' ', '_')}" for collection in filters['collections']]),
+        " ".join([f"+{spoken_language.replace(' ', '_')}" for spoken_language in filters['spoken_languages']]),
+        " ".join([f"+{cast.replace(' ', '_')}" for cast in filters['cast']]),
+        " ".join([f"+{director.replace(' ', '_')}" for director in filters['director']]),
+        " ".join([f"+{keyword.replace(' ', '_')}" for keyword in filters['keywords']]),
     ])
 
     # Search bar
