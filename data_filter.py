@@ -98,8 +98,9 @@ def DataFilter(User_input,spell_check =True):
     keyword = extract_tags_and_keywords(User_input)[1]
     if spell_check:
         corrected_keyword = Spell_fix(" ".join(keyword))
+        keyword_output = " ".join(corrected_keyword)
         if corrected_keyword != keyword:
-            print (f"Showing result for {corrected_keyword}")
+            print (f"Showing result for {keyword_output}")
         keyword = corrected_keyword
     tags = extract_tags_and_keywords(User_input)[0]
     Movie_list = title_search(df, keyword)
