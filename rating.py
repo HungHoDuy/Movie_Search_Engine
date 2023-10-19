@@ -4,7 +4,7 @@ import pandas as pd
 from data_filter import DataFilter
 
 def rating_df(keyword):
-    re_list = DataFilter(keyword)
+    re_list = pd.read_csv('data_done.csv')
     df = re_list[0]
     # print(df)
     keyword = ' '.join(re_list[1])
