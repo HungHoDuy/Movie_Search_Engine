@@ -15,7 +15,7 @@ def Spell_fix(input):
         "q": input + " movie",
         "hl": "en",
         "gl": "us",
-        "api_key": "b48b64bd362615156557823cf6ac5795c248c4c384c84edf1d73bd1aca3eba32"
+        "api_key": "77e50d77bc5d05e33cf8b29162b571414a2448d85e3bf93821f0d69a47cfd40a"
     }
     # Create a Google search object
     search = GoogleSearch(params)
@@ -131,9 +131,11 @@ def DataFilter(User_input, spell_check=True):
     
     return [Movie_list, corrected_keyword]
 
+
+
 # Example usage and timing of the DataFilter function
-start_time = time.time()
-DataFilter('Your Namr')[0].to_csv('filter_sample.csv')
-end_time = time.time()
-execution_time = end_time - start_time
-print(f"Execution time: {execution_time} seconds")
+# start_time = time.time()
+# DataFilter('Your Namr')[0].to_csv('filter_sample.csv')
+# end_time = time.time()
+# execution_time = end_time - start_time
+# print(f"Execution time: {execution_time} seconds")
