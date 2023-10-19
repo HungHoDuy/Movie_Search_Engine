@@ -14,7 +14,7 @@ from posterFind import posterPathFind
 
 def Spell_fix(input):
     params = {
-  "q": input,
+  "q": input+" movie",
   "hl": "en",
   "gl": "us",
   "api_key": "b48b64bd362615156557823cf6ac5795c248c4c384c84edf1d73bd1aca3eba32"
@@ -24,6 +24,7 @@ def Spell_fix(input):
     search_information = results["search_information"]
     spelling_fix = search_information.get("spelling_fix")
     if spelling_fix is not None:
+        spelling_fix = spelling_fix - " movie"
         spelling_fix = spelling_fix.strip().split()
     else:
         input = input.split()
