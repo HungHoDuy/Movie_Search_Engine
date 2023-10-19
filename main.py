@@ -12,7 +12,7 @@ from ZtoA import ZtoA_df
 
 # Preconf
 st.set_page_config(
-    page_title="JAValorant movie search engine",
+    page_title="PyHub",
     layout="wide"
 )
 
@@ -77,19 +77,41 @@ def display_search_results(results, query, results_limit=10):
         st.write("No results found.")
         return
 
-    for index, row in results.head(results_limit).iterrows():
-        st.subheader(row['title'])
-        st.write(row['overview'])
-        st.write(row['vote_average'])
-        st.write(row['popularity'])
-        st.image(row['poster_path'], width=200)
+# Create two rows of columns
+    half_results_limit = results_limit // 2
+    cols_row1 = st.columns(half_results_limit)
+    cols_row2 = st.columns(half_results_limit)
 
-        if st.button("More Details", key=f"details-{index}"):
-            display_movie_details(row)
-            return
+    for index, row in enumerate(results.head(results_limit).iterrows()):
+        idx, data = row
+
+        # Select the appropriate row of columns
+        cols = cols_row1 if index < half_results_limit else cols_row2
+
+        # Select the current column
+        col = cols[index % half_results_limit]
+
+        with col:
+            # Display the movie poster if available, otherwise use a default image
+            poster_url = data['poster_path'] if data['poster_path'] else 'logo.png'
+
+            # Display the poster in the column
+            st.image(poster_url, width=200)
+
+
+    # for index, row in results.head(results_limit).iterrows():
+    #     st.subheader(row['title'])
+    #     st.write(row['overview'])
+    #     st.write(row['vote_average'])
+    #     st.write(row['popularity'])
+    #     st.image(row['poster_path'], width=200)
+
+    #     if st.button("More Details", key=f"details-{index}"):
+    #         display_movie_details(row)
+    #         return
 
 def main():
-    st.title("JAValorant movie search engine")
+    st.title("PyHub - Movie Search Engine")
 
     filters = create_filters()
 
@@ -109,25 +131,26 @@ def main():
     query = st.text_input("Search for movies")
     combined_query = f"{query} {filter_query}".strip()
     if st.button("Search"):
-        # Showing results for: data_filter.DataFilter(User_input, spell_check=True) with click on the corrected search term -> redo search with corrected term
         wordfix = ' '.join(data_filter.Spell_fix(query))
         st.write(f"Showing results for: {wordfix}")
         st.write(f"Search instead for: {query}")
 
         sort = st.selectbox("Sort by", ["Relevance", "Rating", "Popularity", "A to Z", "Z to A"])
 
+        st.write(sort)
+
         if sort == "Relevance":
             results = relevant_df(combined_query)
-        elif sort == "Rating":
-            results = rating_df(combined_query)
-        elif sort == "Popularity":
-            results = popularity_df(combined_query)
-        elif sort == "A to Z":
-            results = AtoZ_df(combined_query)
-        elif sort == "Z to A":
-            results = ZtoA_df(combined_query)
+        # elif sort == "Rating":
+        #     results = rating_df(combined_query)
+        # elif sort == "Popularity":
+        #     results = popularity_df(combined_query)
+        # elif sort == "A to Z":
+        #     results = AtoZ_df(combined_query)
+        # elif sort == "Z to A":
+        #     results = ZtoA_df(combined_query)
 
-        display_search_results(results, query)
+        # display_search_results(results, query)
 
 
 main()
