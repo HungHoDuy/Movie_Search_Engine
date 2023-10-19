@@ -1,62 +1,82 @@
 import streamlit as st
-import unique_sort as tags
+from relevant import relevant_df
+from unique import unique_genres, unique_language, unique_production_companies, unique_collection
 
-def genre_filter():
-    with st.expander('Genre', expanded=True):
-        selected_genres = st.multiselect("Select Genre(s):", tags.unique_genres)
+# Preconf
+st.set_page_config(
+    page_title="JAValorant movie search engine",
+    layout="wide"
+)
 
-    return [f"+{genre}" for genre in selected_genres]
+def create_filters():
+    with st.sidebar:
+        st.title("Filters")
+        
+        with st.expander("Genre"):
+            selected_genres = st.multiselect("Choose genres", unique_genres)
 
-def languages_filter():
-    with st.expander('Language', expanded=True):
-        selected_languages = st.multiselect("Select Language(s):", tags.unique_language)
+        with st.expander("Language"):
+            selected_languages = st.multiselect("Choose languages", unique_language)
 
-    return [f"+{language}" for language in selected_languages]
+        with st.expander("Production Company"):
+            selected_companies = st.multiselect("Choose companies", unique_production_companies)
 
-def companies_filter():
-    with st.expander('Company', expanded=True):
-        selected_companies = st.multiselect("Select Company(s):", tags.unique_production_companies)
+        with st.expander("Collection"):
+            selected_collections = st.multiselect("Choose collections", unique_collection)
 
-    return [f"+{company}" for company in selected_companies]
+    filters = {
+        'genres': selected_genres,
+        'languages': selected_languages,
+        'companies': selected_companies,
+        'collections': selected_collections
+    }
 
-def collection_filter():
-    with st.expander('Collection', expanded=True):
-        selected_collections = st.multiselect("Select Collection(s):", tags.unique_collection)
+    return filters
 
-    return [f"+{collection}" for collection in selected_collections]
+def display_movie_details(movie):
+    st.title(movie['title'])
+    # st.image(movie['poster_url'], width=500)
+    st.write(movie['overview'])
+    st.write("### Rating")
+    st.write(movie['vote_average'])
+    st.write("### Popularity")
+    st.write(movie['popularity'])
+
+def display_search_results(results, query):
+    st.title(f"Search Results for your query:")
+    
+    if results.empty:
+        st.write("No results found.")
+        return
+
+    for index, row in results.iterrows():
+        st.subheader(row['title'])
+        st.write(row['overview'])
+        st.write(row['vote_average'])
+        st.write(row['popularity'])
+        # st.image(row['poster_url'], width=200)
+
+        if st.button("More Details", key=f"details-{index}"):
+            display_movie_details(row)
+            return
 
 def main():
-    st.title("Movie Search Engine")
+    st.title("JAValorant movie search engine")
 
-    # Keyword search bar
-    keyword = st.text_input("Enter movie name or keyword:")
+    filters = create_filters()
 
-    # Tags
-    genres = genre_filter()
-    languages = languages_filter()
-    companies = companies_filter()
-    collection = collection_filter()
+    filter_query = " ".join([
+        " ".join([f"+{genre}" for genre in filters['genres']]),
+        " ".join([f"+{language}" for language in filters['languages']]),
+        " ".join([f"+{company}" for company in filters['companies']]),
+        " ".join([f"+{collection}" for collection in filters['collections']])
+    ])
 
-    # Year filter
-    # year_start, year_end = st.slider("Select Year Range:", min_value=1900, max_value=2023, value=(1900, 2023), step=1)
-
-    # User rating filter
-    user_rating = st.slider("Select User Rating:", min_value=0.0, max_value=10.0, value=(0.0, 10.0), step=0.1)
-    # TODO: trunc decimal to first decimal place
-
-    # Search Button
+    # Search bar
+    query = st.text_input("Search for movies")
+    combined_query = f"{query} {filter_query}".strip()
     if st.button("Search"):
-        st.write(f"Keyword: {keyword}")
-        tag_str = ""
-        if len(genres) > 0:
-            tag_str += f"{' '.join(genres)} "
-        if len(languages) > 0:
-            tag_str += f"{' '.join(languages)} "
-        if len(companies) > 0:
-            tag_str += f"{' '.join(companies)} "
-        if len(collection) > 0:
-            tag_str += f"{' '.join(collection)} "
-        tag_str += f"{user_rating}"
-        st.write(f"Tags: {tag_str}")
+        results = relevant_df(combined_query)
+        display_search_results(results, combined_query)
 
 main()
