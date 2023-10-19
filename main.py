@@ -1,6 +1,6 @@
 import streamlit as st
 from relevant import relevant_df
-from unique import unique_genres, unique_language, unique_production_companies, unique_collection
+from unique import unique_genres, unique_language, unique_production_companies, unique_belongs_to_collection, unique_production_countries
 
 # Preconf
 st.set_page_config(
@@ -18,15 +18,19 @@ def create_filters():
         with st.expander("Language"):
             selected_languages = st.multiselect("Choose languages", unique_language)
 
+        with st.expander("Production Country"):
+            selected_countries = st.multiselect("Choose countries", unique_production_countries)
+
         with st.expander("Production Company"):
             selected_companies = st.multiselect("Choose companies", unique_production_companies)
 
         with st.expander("Collection"):
-            selected_collections = st.multiselect("Choose collections", unique_collection)
+            selected_collections = st.multiselect("Choose collections", unique_belongs_to_collection)
 
     filters = {
         'genres': selected_genres,
         'languages': selected_languages,
+        'countries': selected_countries,
         'companies': selected_companies,
         'collections': selected_collections
     }
@@ -68,6 +72,7 @@ def main():
     filter_query = " ".join([
         " ".join([f"+{genre.replace(' ', '_')}" for genre in filters['genres']]),
         " ".join([f"+{language.replace(' ', '_')}" for language in filters['languages']]),
+        " ".join([f"+{country.replace(' ', '_')}" for country in filters['countries']]),
         " ".join([f"+{company.replace(' ', '_')}" for company in filters['companies']]),
         " ".join([f"+{collection.replace(' ', '_')}" for collection in filters['collections']])
     ])
