@@ -46,14 +46,14 @@ def display_movie_details(movie):
     st.write("### Popularity")
     st.write(movie['popularity'])
 
-def display_search_results(results, query):
+def display_search_results(results, query, results_limit=10):
     st.title(f"Search Results for your query:")
     
     if results.empty:
         st.write("No results found.")
         return
 
-    for index, row in results.iterrows():
+    for index, row in results.head(results_limit).iterrows():
         st.subheader(row['title'])
         st.write(row['overview'])
         st.write(row['vote_average'])
