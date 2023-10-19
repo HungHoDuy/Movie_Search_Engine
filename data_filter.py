@@ -42,11 +42,12 @@ def extract_tags_and_keywords(input_string):
 
 
 def title_search(dataframe, keyword):
-    filtered_df = dataframe[dataframe['title'].str.contains("|".join(keyword), case=False, na=False) | dataframe['original_title'].str.contains("|".join(keyword), case=False, na=False)]
+    keyword = "|".join(keyword)
+    filtered_df = dataframe[dataframe['title'].str.contains(keyword, case=False, na=False) | dataframe['original_title'].str.contains(keyword, case=False, na=False) |dataframe['keywords'].str.contains(keyword, case=False, na=False) ]
     return filtered_df
 
 
-def tag_search(dataframe, tags, genres_tags, language_tags, production_countries_tags, production_companies_tags):
+def tag_search(dataframe, tags, genres_tags, language_tags, production_companies_tags):
     if len(tags) == 0:
         return dataframe
     for tag in tags:
@@ -57,8 +58,8 @@ def tag_search(dataframe, tags, genres_tags, language_tags, production_countries
             dataframe = dataframe[dataframe['genres'].str.contains(tag, case=False, na=False)]
         elif tag in language_tags:
             dataframe = dataframe[dataframe['original_language'].str.contains(tag, case=False, na=False)]
-        elif tag in production_countries_tags:
-            dataframe = dataframe[dataframe['production_countries'].str.contains(tag, case=False, na=False)]
+        # elif tag in production_countries_tags:
+        #     dataframe = dataframe[dataframe['production_countries'].str.contains(tag, case=False, na=False)]
         elif tag in production_companies_tags:
             dataframe = dataframe[dataframe['production_companies'].str.contains(tag, case=False, na=False)]
         # elif tag in collection_tags:
@@ -73,12 +74,12 @@ def DataFilter(User_input):
     genres_tags = unique_algorithm.unique_genres_read
     language_tags = unique_algorithm.unique_language_read
     production_companies_tags = unique_algorithm.unique_production_companies_read
-    production_countries_tags = unique_algorithm.unique_production_countries_read
+    # production_countries_tags = unique_algorithm.unique_production_countries_read
     # collection_tags = unique_algorithm.unique_collection
     keyword = extract_tags_and_keywords(User_input)[1]
     tags = extract_tags_and_keywords(User_input)[0]
     Movie_list = title_search(df, keyword)
-    Movie_list = tag_search(Movie_list, tags, genres_tags, language_tags, production_countries_tags, production_companies_tags)
+    Movie_list = tag_search(Movie_list, tags, genres_tags, language_tags, production_companies_tags)
     # Movie_list['poster_path'] = Movie_list['imdb_id'].apply(posterPathFind)
    
     return Movie_list
@@ -87,8 +88,8 @@ def DataFilter(User_input):
 # start_time = time.time()
 
 
-# result = DataFilter("bat man +animation")
-# print(result["genres"])
+result = DataFilter("usa president")
+print(result[["title", "original_title", "keywords"]])
 
 # end_time = time.time()
 # execution_time = end_time - start_time
