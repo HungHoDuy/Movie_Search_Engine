@@ -23,7 +23,11 @@ def Spell_fix(input):
     results = search.get_dict()
     search_information = results["search_information"]
     spelling_fix = search_information.get("spelling_fix")
-    spelling_fix = spelling_fix.strip().split()
+    if spelling_fix is not None:
+        spelling_fix = spelling_fix.strip().split()
+    else:
+        input = input.split()
+        return input
     return spelling_fix
 
 def data_process():
@@ -60,7 +64,7 @@ def title_search(dataframe, keyword):
     return filtered_df
 
 
-def tag_search(dataframe, tags, genres_tags, language_tags, production_companies_tags):
+def tag_search(dataframe, tags, genres_tags, language_tags,production_countries_tags,collection_tags , production_companies_tags):
     if len(tags) == 0:
         return dataframe
     for tag in tags:
@@ -71,12 +75,12 @@ def tag_search(dataframe, tags, genres_tags, language_tags, production_companies
             dataframe = dataframe[dataframe['genres'].str.contains(tag, case=False, na=False)]
         elif tag in language_tags:
             dataframe = dataframe[dataframe['original_language'].str.contains(tag, case=False, na=False)]
-        # elif tag in production_countries_tags:
-        #     dataframe = dataframe[dataframe['production_countries'].str.contains(tag, case=False, na=False)]
+        elif tag in production_countries_tags:
+            dataframe = dataframe[dataframe['production_countries'].str.contains(tag, case=False, na=False)]
         elif tag in production_companies_tags:
             dataframe = dataframe[dataframe['production_companies'].str.contains(tag, case=False, na=False)]
-        # elif tag in collection_tags:
-        #     dataframe = dataframe[dataframe['belongs_to_collection'].str.contains(tag, case=False, na=False)]
+        elif tag in collection_tags:
+            dataframe = dataframe[dataframe['belongs_to_collection'].str.contains(tag, case=False, na=False)]
         else:
             return pd.DataFrame(columns=dataframe.columns)
     return dataframe
@@ -87,26 +91,27 @@ def DataFilter(User_input,spell_check =True):
     genres_tags = unique_algorithm.unique_genres_read
     language_tags = unique_algorithm.unique_language_read
     production_companies_tags = unique_algorithm.unique_production_companies_read
-    # production_countries_tags = unique_algorithm.unique_production_countries_read
-    # collection_tags = unique_algorithm.unique_collection
+    production_countries_tags = unique_algorithm.unique_production_countries_read
+    collection_tags = unique_algorithm.unique_belongs_to_collection
     keyword = extract_tags_and_keywords(User_input)[1]
     if spell_check:
-        keyword = Spell_fix(" ".join(keyword))
-        print (f"Showing result for {keyword}")
+        corrected_keyword = Spell_fix(" ".join(keyword))
+        if corrected_keyword != keyword:
+            print (f"Showing result for {corrected_keyword}")
     tags = extract_tags_and_keywords(User_input)[0]
     Movie_list = title_search(df, keyword)
-    Movie_list = tag_search(Movie_list, tags, genres_tags, language_tags, production_companies_tags)
+    Movie_list = tag_search(Movie_list, tags, genres_tags, language_tags,production_countries_tags,collection_tags, production_companies_tags)
     # Movie_list['poster_path'] = Movie_list['imdb_id'].apply(posterPathFind)
    
-    return Movie_list
+    return [Movie_list,corrected_keyword]
 
 
-start_time = time.time()
+# start_time = time.time()
 
-result = DataFilter("immpossible mission")
-print(result[["title", "original_title", "keywords"]])
+# result = DataFilter("immpossible mission")
+# print(result[["title", "original_title", "keywords"]])
 
-end_time = time.time()
-execution_time = end_time - start_time
-print(f"Execution time: {execution_time} seconds")
+# end_time = time.time()
+# execution_time = end_time - start_time
+# print(f"Execution time: {execution_time} seconds")
 
