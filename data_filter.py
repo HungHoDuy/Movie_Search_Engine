@@ -24,7 +24,7 @@ def Spell_fix(input):
     search_information = results["search_information"]
     spelling_fix = search_information.get("spelling_fix")
     if spelling_fix is not None:
-        spelling_fix = spelling_fix - " movie"
+        spelling_fix = spelling_fix.replace(" movie",'')
         spelling_fix = spelling_fix.strip().split()
     else:
         input = input.split()
