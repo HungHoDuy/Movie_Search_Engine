@@ -54,7 +54,7 @@ def display_search_results(results, query):
         st.write(row['overview'])
         st.write(row['vote_average'])
         st.write(row['popularity'])
-        # st.image(row['poster_url'], width=200)
+        st.image(row['poster_path'], width=200)
 
         if st.button("More Details", key=f"details-{index}"):
             display_movie_details(row)
