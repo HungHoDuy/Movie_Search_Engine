@@ -4,6 +4,11 @@ from unique import unique_genres, unique_original_language, unique_production_co
 from cast import unique_cast
 from director import unique_director
 from keywords import unique_keywords
+import data_filter
+from rating import rating_df
+from popularity import popularity_df
+from AtoZ import AtoZ_df
+from ZtoA import ZtoA_df
 
 # Preconf
 st.set_page_config(
@@ -104,7 +109,25 @@ def main():
     query = st.text_input("Search for movies")
     combined_query = f"{query} {filter_query}".strip()
     if st.button("Search"):
-        results = relevant_df(combined_query)
-        display_search_results(results, combined_query)
+        # Showing results for: data_filter.DataFilter(User_input, spell_check=True) with click on the corrected search term -> redo search with corrected term
+        wordfix = ' '.join(data_filter.Spell_fix(query))
+        st.write(f"Showing results for: {wordfix}")
+        st.write(f"Search instead for: {query}")
+
+        sort = st.selectbox("Sort by", ["Relevance", "Rating", "Popularity", "A to Z", "Z to A"])
+
+        if sort == "Relevance":
+            results = relevant_df(combined_query)
+        elif sort == "Rating":
+            results = rating_df(combined_query)
+        elif sort == "Popularity":
+            results = popularity_df(combined_query)
+        elif sort == "A to Z":
+            results = AtoZ_df(combined_query)
+        elif sort == "Z to A":
+            results = ZtoA_df(combined_query)
+
+        display_search_results(results, query)
+
 
 main()
