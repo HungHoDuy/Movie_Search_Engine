@@ -172,4 +172,9 @@ for item in unique_belongs_to_collection:
     if str(item) != 'nan':
         new_list.append(item)
         
+unique_production_countries = set(subitem for item in df['production_countries'] for subitem in str(item).split(','))
+new_list = []
+for item in unique_production_countries:
+    if str(item) != 'nan':
+        new_list.append(item)
 print(new_list)
