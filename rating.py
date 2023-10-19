@@ -4,8 +4,10 @@ import pandas as pd
 from data_filter import DataFilter
 
 def rating_df(keyword):
-    df = DataFilter(keyword)
-    df.to_csv('input.csv')
+    re_list = DataFilter(keyword)
+    df = re_list[0]
+    # print(df)
+    keyword = ' '.join(re_list[1])
     vote_counts = df[df['vote_count'].notnull()]['vote_count'].astype('int')
     vote_averages = df[df['vote_average'].notnull()]['vote_average'].astype('int')
     C = 5.244896612406511

@@ -3,7 +3,10 @@ from data_filter import DataFilter
 
 
 def popularity_df(keyword):
-    df = DataFilter(keyword)
+    re_list = DataFilter(keyword)
+    df = re_list[0]
+    # print(df)
+    keyword = ' '.join(re_list[1])
     df["popularity"] = pd.to_numeric(df["popularity"], errors="coerce")
     df = df.sort_values(by="popularity", ascending=False)
     return df

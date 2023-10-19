@@ -16,10 +16,12 @@ def relevant_df(keyword):
 
         return similarity * 100  # Convert to percentage
 
-    df = DataFilter(keyword)
-    df.to_csv('sample.csv')
+    re_list = DataFilter(keyword)
+    df = re_list[0]
+    print(df)
+    keyword = ' '.join(re_list[1])
     df['score'] = df['title'].apply(keyword_similarity_advanced)
     df = df.sort_values(by='score', ascending=False)
     return df
 
-relevant_df('impossible mission').to_csv('result_sample.csv')
+relevant_df('your namd +animation').to_csv('result_sample.csv')
