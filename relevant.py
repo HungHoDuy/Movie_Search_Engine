@@ -22,4 +22,4 @@ def relevant_df(keyword):
     df = df.sort_values(by='score', ascending=False)
     return df
 
-# relevant_df('+animationgit').to_csv('result_sample.csv')
+relevant_df('impossible mission').to_csv('result_sample.csv')
