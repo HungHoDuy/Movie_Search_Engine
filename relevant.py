@@ -17,6 +17,7 @@ def relevant_df(keyword):
         return similarity * 100  # Convert to percentage
 
     re_list = DataFilter(keyword)
+    re_list[0].to_csv('data_done.csv')
     df = re_list[0]
     # print(df)
     keyword = ' '.join(re_list[1])
