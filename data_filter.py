@@ -3,6 +3,9 @@ from serpapi import GoogleSearch
 import pandas as pd
 import time
 import unique_filter
+import director_tag
+import keywords_tag
+import cast_tag
 from posterFind import posterPathFind
 
 # Define a function to perform spelling correction using Google search
@@ -62,12 +65,11 @@ def extract_tags_and_keywords(input_string):
 def title_search(dataframe, keyword):
     keyword = "|".join(keyword)
     filtered_df = dataframe[dataframe['title'].str.contains(keyword, case=False, na=False) |
-                          dataframe['original_title'].str.contains(keyword, case=False, na=False) |
-                          dataframe['keywords'].str.contains(keyword, case=False, na=False)]
+                          dataframe['original_title'].str.contains(keyword, case=False, na=False)]
     return filtered_df
 
 # Define a function to filter data based on tags
-def tag_search(dataframe, tags, genres_tags, language_tags, production_countries_tags, collection_tags, production_companies_tags):
+def tag_search(dataframe, tags, genres_tags, language_tags, production_countries_tags, collection_tags, production_companies_tags, director_tags,cast_tags,keywords_tags):
     if len(tags) == 0:
         return dataframe
     for tag in tags:
@@ -84,6 +86,12 @@ def tag_search(dataframe, tags, genres_tags, language_tags, production_countries
             dataframe = dataframe[dataframe['production_companies'].str.contains(tag, case=False, na=False)]
         elif tag in collection_tags:
             dataframe = dataframe[dataframe['belongs_to_collection'].str.contains(tag, case=False, na=False)]
+        elif tag in director_tags:
+            dataframe = dataframe[dataframe['crew'].str.contains(tag, case=False, na=False)]
+        elif tag in cast_tags:
+            dataframe = dataframe[dataframe['cast'].str.contains(tag, case=False, na=False)]
+        elif tag in keywords_tags:
+            dataframe = dataframe[dataframe['keywords'].str.contains(tag, case=False, na=False)]
         else:
             return pd.DataFrame(columns=dataframe.columns)
     return dataframe
@@ -97,6 +105,9 @@ def DataFilter(User_input, spell_check=True):
     production_companies_tags = unique_filter.unique_production_companies_read
     production_countries_tags = unique_filter.unique_production_countries_read
     collection_tags = unique_filter.unique_belongs_to_collection_read
+    keywords_tags = keywords_tag.unique_keywords_tag
+    director_tags = director_tag.unique_director_tag
+    cast_tags = cast_tag.unique_cast_tag
 
     # Extract keywords and tags from user input
     keyword = extract_tags_and_keywords(User_input)[1]
@@ -113,7 +124,7 @@ def DataFilter(User_input, spell_check=True):
     
     # Search for movies by title and filter based on tags
     Movie_list = title_search(df, keyword)
-    Movie_list = tag_search(Movie_list, tags, genres_tags, language_tags, production_countries_tags, collection_tags, production_companies_tags)
+    Movie_list = tag_search(Movie_list, tags, genres_tags, language_tags, production_countries_tags, collection_tags, production_companies_tags,director_tags,cast_tags,keywords_tags)
     
     # Add a 'poster_path' column to the DataFrame using posterPathFind
     # Movie_list['poster_path'] = Movie_list['imdb_id'].apply(posterPathFind)
@@ -121,8 +132,8 @@ def DataFilter(User_input, spell_check=True):
     return [Movie_list, corrected_keyword]
 
 # Example usage and timing of the DataFilter function
-# start_time = time.time()
-# DataFilter('Your Namr')[0].to_csv('filter_sample.csv')
-# end_time = time.time()
-# execution_time = end_time - start_time
-# print(f"Execution time: {execution_time} seconds")
+start_time = time.time()
+DataFilter('Your Namr')[0].to_csv('filter_sample.csv')
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Execution time: {execution_time} seconds")
