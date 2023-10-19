@@ -111,8 +111,8 @@ def DataFilter(User_input,spell_check =True):
 
 # start_time = time.time()
 
-result = DataFilter("immpossible mission")
-print(result[["title", "original_title", "keywords"]])
+result = DataFilter("Youd Namd")
+print(result[0][["title", "original_title", "keywords"]])
 
 # end_time = time.time()
 # execution_time = end_time - start_time
