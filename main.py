@@ -9,12 +9,15 @@ from rating import rating_df
 from popularity import popularity_df
 from AtoZ import AtoZ_df
 from ZtoA import ZtoA_df
+from streamlit_extras.app_logo import add_logo 
 
 # Preconf
 st.set_page_config(
-    page_title="JAValorant movie search engine",
+    page_title="PyFlix",
     layout="wide"
 )
+
+add_logo("logo.png", height=300)
 
 def create_filters():
     with st.sidebar:
@@ -75,7 +78,6 @@ def display_search_results(results, query, results_limit=10):
     
     if results.empty:
         st.write("No results found.")
-        return
 
     # for index, row in results.head(results_limit).iterrows():
     #     st.subheader(row['title'])
@@ -104,10 +106,9 @@ def display_search_results(results, query, results_limit=10):
 
             if col.button("More Details", key=f"details-{index}"):
                 display_movie_details(data)
-                return
             
 def main():
-    st.title("JAValorant movie search engine")
+    st.title("PyFlix - Movie search engine")
 
     filters = create_filters()
 
@@ -125,14 +126,15 @@ def main():
 
     # Search bar
     query = st.text_input("Search for movies")
+
     combined_query = f"{query} {filter_query}".strip()
+    sort = st.selectbox("Sort by", ["Relevance", "Rating", "Popularity", "A to Z", "Z to A"])
     if st.button("Search"):
-        # Showing results for: data_filter.DataFilter(User_input, spell_check=True) with click on the corrected search term -> redo search with corrected term
         wordfix = ' '.join(data_filter.Spell_fix(query))
         st.write(f"Showing results for: {wordfix}")
         st.write(f"Search instead for: {query}")
 
-        sort = st.selectbox("Sort by", ["Relevance", "Rating", "Popularity", "A to Z", "Z to A"])
+        
 
         if sort == "Relevance":
             results = relevant_df(combined_query)
