@@ -5,3 +5,7 @@ serpapi
 google-search-results
 streamlit_tailwind
 scikit-learn
+requests
+streamlit_extras
+streamlit_modal
+ast
