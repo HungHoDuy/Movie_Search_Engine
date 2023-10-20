@@ -11,6 +11,7 @@ from AtoZ import AtoZ_df
 from ZtoA import ZtoA_df
 from streamlit_extras.app_logo import add_logo
 from streamlit_modal import Modal
+import requests
 
 # Preconf
 st.set_page_config(
@@ -65,54 +66,64 @@ def create_filters():
     return filters
 
 def display_search_results(results, query, results_limit=10):
-    # st.title(f"Search Results for '{query}':")
+    st.title(f"Search Results for '{query}':")
 
-    # if results.empty:
-    #     st.write("No results found.")
-    #     return
+    if results.empty:
+        st.write("No results found.")
+        return
 
-    # half_results_limit = results_limit // 2
-    # cols_row1 = st.columns(half_results_limit)
-    # cols_row2 = st.columns(half_results_limit)
+    half_results_limit = results_limit // 2
+    cols_row1 = st.columns(half_results_limit)
+    cols_row2 = st.columns(half_results_limit)
 
-    # for index, row in enumerate(results.head(results_limit).iterrows()):
-    #     idx, data = row
+    for index, row in enumerate(results.head(results_limit).iterrows()):
+        idx, data = row
 
-    #     cols = cols_row1 if index < half_results_limit else cols_row2
-    #     col = cols[index % half_results_limit]
+        cols = cols_row1 if index < half_results_limit else cols_row2
+        col = cols[index % half_results_limit]
 
-    #     with col:
-    #         poster_url = data['poster_path'] if data['poster_path'] else 'logo.png'
-    #         col.image(poster_url, width=200)
-    #         col.write(data['title'])
+        with col:
+            target_url = data['poster_path']
+            req = requests.get(target_url)
+            if req.status_code == 200:
+                poster_url = data['poster_path']
+            else:
+                poster_url = 'logo.png'
+            col.image(poster_url, width=200)
+            col.write(data['title'])
 
-    #         modal_key = f"movie-detail-{index}" 
-    #         modal = Modal("Movie Detail", key=modal_key)
-    #         open_modal = col.button("More Details", key=f"open-{modal_key}")
+            modal_key = f"movie-detail-{index}" 
+            modal = Modal("Movie Detail", key=modal_key)
+            open_modal = col.button("More Details", key=f"open-{modal_key}")
     
-    #         if open_modal:
-    #             modal.open()
+            if open_modal:
+                modal.open()
 
-    #         if modal.is_open():
-    #             with modal.container():
-    #                 col.write(f"**Overview:** {data['overview']}")
-    #                 col.write(f"**Genres:** {data['genres']}")
-    #                 col.write(f"**Production Companies:** {data['production_companies']}")
-    #                 col.write(f"**Cast:** {data['cast']}")
-    #                 col.write(f"**Director:** {data['director']}")
-    #                 col.write(f"**Keywords:** {data['keywords']}")
+            if modal.is_open():
+                with modal.container():
+                    col.write(f"**Overview:** {data['overview']}")
+                    col.write(f"**Genres:** {data['genres']}")
+                    col.write(f"**Production Companies:** {data['production_companies']}")
+                    col.write(f"**Cast:** {data['cast']}")
+                    col.write(f"**Director:** {data['director']}")
+                    col.write(f"**Keywords:** {data['keywords']}")
 
-    for index, row in results.head(results_limit).iterrows():
-        st.subheader(row['title'])
-        col1, col2 = st.columns([1, 3])
-        with col1:
-            st.image(row['poster_path'], width=200)
-        with col2:
-            st.write(f"Genre: {row['genres']}")
-            st.write(f"Overview: {row['overview']}")
-            st.write(f"Production Companies: {row['production_companies']}")
-            st.write(f"Vote Average: {row['vote_average']}")
-            st.write(f"Popularity: {row['popularity']}")
+    # for index, row in results.head(results_limit).iterrows():
+    #     st.subheader(row['title'])
+    #     col1, col2 = st.columns([1, 3])
+    #     with col1:
+    #         target_url = row['poster_path']
+    #         req = requests.get(target_url)
+    #         if req.status_code == 200:
+    #             st.image(row['poster_path'], width=200)
+    #         else:
+    #             st.image("logo.png")
+    #     with col2:
+    #         st.write(f"Genre: {row['genres']}")
+    #         st.write(f"Overview: {row['overview']}")
+    #         st.write(f"Production Companies: {row['production_companies']}")
+    #         st.write(f"Vote Average: {row['vote_average']}")
+    #         st.write(f"Popularity: {row['popularity']}")
 
         # if st.button("More Details", key=f"details-{index}"):
         #     display_movie_details(row)
