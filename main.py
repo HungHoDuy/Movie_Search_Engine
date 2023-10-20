@@ -13,14 +13,13 @@ from streamlit_extras.app_logo import add_logo
 
 # Preconf
 st.set_page_config(
-    page_title="PyFlix",
+    page_title="PyHub",
     layout="wide"
 )
 
-add_logo("logo.png", height=300)
-
 def create_filters():
     with st.sidebar:
+
         st.title("Filters")
         
         with st.expander("Genre"):
@@ -108,7 +107,8 @@ def display_search_results(results, query, results_limit=10):
                 display_movie_details(data)
             
 def main():
-    st.title("PyFlix - Movie search engine")
+    st.image("logo.png")
+    st.title("PyHub - Movie search engine")
 
     filters = create_filters()
 
@@ -133,8 +133,6 @@ def main():
         wordfix = ' '.join(data_filter.Spell_fix(query))
         st.write(f"Showing results for: {wordfix}")
         st.write(f"Search instead for: {query}")
-
-        
 
         if sort == "Relevance":
             results = relevant_df(combined_query)
