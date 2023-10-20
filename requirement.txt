@@ -4,3 +4,4 @@ sklearn
 serpapi
 google-search-results
 streamlit_tailwind
+scikit-learn
