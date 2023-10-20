@@ -9,12 +9,15 @@ from rating import rating_df
 from popularity import popularity_df
 from AtoZ import AtoZ_df
 from ZtoA import ZtoA_df
+from streamlit_extras.app_logo import add_logo 
 
 # Preconf
 st.set_page_config(
-    page_title="JAValorant movie search engine",
+    page_title="PyFlix",
     layout="wide"
 )
+
+add_logo("logo.png", height=300)
 
 def create_filters():
     with st.sidebar:
@@ -75,21 +78,37 @@ def display_search_results(results, query, results_limit=10):
     
     if results.empty:
         st.write("No results found.")
-        return
 
-    for index, row in results.head(results_limit).iterrows():
-        st.subheader(row['title'])
-        st.write(row['overview'])
-        st.write(row['vote_average'])
-        st.write(row['popularity'])
-        st.image(row['poster_path'], width=200)
+    # for index, row in results.head(results_limit).iterrows():
+    #     st.subheader(row['title'])
+    #     st.write(row['overview'])
+    #     st.write(row['vote_average'])
+    #     st.write(row['popularity'])
+    #     st.image(row['poster_path'], width=200)
 
-        if st.button("More Details", key=f"details-{index}"):
-            display_movie_details(row)
-            return
+    #     if st.button("More Details", key=f"details-{index}"):
+    #         display_movie_details(row)
+    #         return
+    
+    half_results_limit = results_limit // 2
+    cols_row1 = st.columns(half_results_limit)
+    cols_row2 = st.columns(half_results_limit)
 
+    for index, row in enumerate(results.head(results_limit).iterrows()):
+        idx, data = row
+        cols = cols_row1 if index < half_results_limit else cols_row2
+        col = cols[index % half_results_limit]
+
+        with col:
+            poster_url = data['poster_path'] if data['poster_path'] else 'logo.png'
+            col.image(poster_url, width=200)
+            col.write(data['title'])
+
+            if col.button("More Details", key=f"details-{index}"):
+                display_movie_details(data)
+            
 def main():
-    st.title("JAValorant movie search engine")
+    st.title("PyFlix - Movie search engine")
 
     filters = create_filters()
 
@@ -107,14 +126,15 @@ def main():
 
     # Search bar
     query = st.text_input("Search for movies")
+
     combined_query = f"{query} {filter_query}".strip()
+    sort = st.selectbox("Sort by", ["Relevance", "Rating", "Popularity", "A to Z", "Z to A"])
     if st.button("Search"):
-        # Showing results for: data_filter.DataFilter(User_input, spell_check=True) with click on the corrected search term -> redo search with corrected term
         wordfix = ' '.join(data_filter.Spell_fix(query))
         st.write(f"Showing results for: {wordfix}")
         st.write(f"Search instead for: {query}")
 
-        sort = st.selectbox("Sort by", ["Relevance", "Rating", "Popularity", "A to Z", "Z to A"])
+        
 
         if sort == "Relevance":
             results = relevant_df(combined_query)

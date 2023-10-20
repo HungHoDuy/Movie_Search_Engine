@@ -26,4 +26,4 @@ def relevant_df(keyword):
         df = df.sort_values(by='score', ascending=False)
     return df
 
-# relevant_df('+science_fiction').to_csv('result_sample.csv')
+# relevant_df('Your Name').to_csv('result_sample.csv')
